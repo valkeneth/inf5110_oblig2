@@ -23,7 +23,7 @@ Comment = \/\/.*
 LineTerminator = \r|\n|\r\n
 WhiteSpace = {LineTerminator} | [ \t\f]
 Identifier = [:jletter:] [:jletterdigit:]*
-Integer = [+-]?[1-9][0-9]*
+Integer = [+-]?[1-9][0-9]* | 0
 String_literal = \"([^\\\"]|\\.)*\"
 Float = [+-]?[0-9]*\.[0-9]*
 %%
@@ -39,8 +39,15 @@ Float = [+-]?[0-9]*\.[0-9]*
         "string"						{ return symbol(sym.STRING); }
         "bool"							{ return symbol(sym.BOOL); }
         "new"							{ return symbol(sym.NEW); }
+        "true"							{ return symbol(sym.TRUE); }
+        "false"							{ return symbol(sym.FALSE); }
+        "&&"							{ return symbol(sym.AND); }
+        "||"							{ return symbol(sym.OR); }
+        "null"							{ return symbol(sym.NULL); }
         "not"							{ return symbol(sym.NOT); }
         "if"							{ return symbol(sym.IF); }
+        "while"							{ return symbol(sym.WHILE); }
+        "do"							{ return symbol(sym.DO); }
         "then"							{ return symbol(sym.THEN); }
         ">"								{ return symbol(sym.GT); }
         "<"								{ return symbol(sym.LT); }

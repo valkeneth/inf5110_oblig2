@@ -11,6 +11,23 @@ public class CallStatement extends Statement{
     	super.stmt = this;
     	this.name = name;
     	this.children = children;
+    	boolean methodDeclared = false;
+    	for (int i = 0; i < symbolTable.size(); i++) {
+			if (symbolTable.get(i).name.equals(this.name) && symbolTable.get(i).mtype.equals("method")) {
+				methodDeclared = true;
+			}
+    	}
+    	if (name.equals("printstr") || name.equals("printint") || name.equals("printfloat") || name.equals("printline")) methodDeclared = true;
+    	if (!methodDeclared) semErrors.add("Method with name " + name + " has not been declared");
+    }
+    
+    public String getType() {
+    	for (int i = 0; i < symbolTable.size(); i++) {
+			if (symbolTable.get(i).name.equals(this.name) && symbolTable.get(i).mtype.equals("method")) {
+				return symbolTable.get(i).type;
+			}
+    	}
+    	return "";
     }
 
     public String printAst(String prefix) {
@@ -22,5 +39,10 @@ public class CallStatement extends Statement{
         }
         ret += prefix + ")\n";
         return ret;
+    }
+    
+    @Override
+    public void checkParentSem() {
+    	return;
     }
 }

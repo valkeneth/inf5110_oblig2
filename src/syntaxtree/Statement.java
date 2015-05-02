@@ -7,9 +7,21 @@ public class Statement extends AstNode{
     public Statement (Statement statement) {
     	super();
     	this.stmt = statement;
+    	if (stmt != null) {
+    		stmt.setParent(this);
+    	}
+    }
+    
+    public Statement getStatement() {
+    	return stmt;
     }
 
     public String printAst(String prefix) {
         return stmt.printAst(prefix);
+    }
+    
+    @Override
+    public void checkParentSem() {
+    	stmt.checkParentSem();
     }
 }

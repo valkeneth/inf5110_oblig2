@@ -14,4 +14,9 @@ public class Literal extends AstNode{
     public String printAst(String prefix) {
         return name + "_LITERAL " + obj.toString();
     }
+    
+    @Override 
+    public String getType() {
+    	return this.name.toLowerCase();
+    }
 }

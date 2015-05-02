@@ -9,10 +9,15 @@ public class VarDecl extends AstNode{
     	super();
     	this.name = name;
     	this.type = type;
+    	Symbol sym = new Symbol(name, type.getName(), "variable");
+    	symbolTable.add(sym);
+    	printSymbols();
     }
 
     @Override
     public String printAst(String prefix) {
         return prefix + "(VAR_DECL " + type.printAst("") + "(NAME " + name + "))\n";
     }
+    
+    
 }

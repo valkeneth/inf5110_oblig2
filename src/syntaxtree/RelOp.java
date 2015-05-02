@@ -8,6 +8,10 @@ public class RelOp extends AstNode{
     	super();
     	this.type = type;
     }
+    
+    public String getType() {
+    	return "RelOp";
+    }
 
     public String printAst(String prefix) {
         return "(REL_OP " + type;

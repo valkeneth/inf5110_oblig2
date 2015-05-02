@@ -1,5 +1,6 @@
 package syntaxtree;
 
+
 public class Var extends AstNode{
 
     Expression exp;
@@ -23,5 +24,17 @@ public class Var extends AstNode{
     	else {
     		return prefix + "(. " + exp.printAst("").trim() + " (NAME " + name + ")\n";
     	}
+    }
+    
+    public String getName() {
+    	return this.name;
+    }
+    
+    @Override
+    public String getType() {
+    	for (int i = 0; i < symbolTable.size(); i++) {
+    		if (symbolTable.get(i).name.equals(this.name)) return symbolTable.get(i).type;
+    	}
+    	return "";
     }
 }

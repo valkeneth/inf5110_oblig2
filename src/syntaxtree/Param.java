@@ -11,6 +11,8 @@ public class Param extends AstNode{
     	this.name = name;
     	this.type = type;
     	this.ref = ref;
+    	Symbol sym = new Symbol(name, type.getName(), "variable");
+    	symbolTable.add(sym);
     }
 
     public String printAst(String prefix) {

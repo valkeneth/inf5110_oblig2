@@ -12,4 +12,8 @@ public class Type extends AstNode{
     public String printAst(String prefix) {
         return "(TYPE " + name + ")";
     }
+    
+    public String getName() {
+    	return name;
+    }
 }

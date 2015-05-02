@@ -19,7 +19,6 @@ public class Compiler {
         this.binFilename = binFilename;
     }
     public int compile() throws Exception {
-    	System.out.println("compiling");
         InputStream inputStream = null;
         inputStream = new FileInputStream(this.inFilename);
         Lexer lexer = new Lexer(inputStream);
@@ -32,22 +31,23 @@ public class Compiler {
             throw e; // Or something.
         }
         // Check semantics.
-        if(false){ // If it is all ok:
-            writeAST(program);
-            generateCode(program);
+        int semanticCheck = program.checkSemantics();
+        if(semanticCheck == 0){ // If it is all ok:
+            //writeAST(program);
+            //generateCode(program);
             return 0;
-        } else if (false){ // If there is a SYNTAX ERROR (Should not get that for the tests):
-            System.out.println("syntax");
+        } else if (semanticCheck == 1){ // If there is a SYNTAX ERROR (Should not get that for the tests):
+            System.out.println("syntax error");
             return 1;
         } else { // If there is a SEMANTIC ERROR (Should get that for the test with "_fail" in the name):
-        	System.out.println("semantic");
         	return 2;
         }
     }
     private void writeAST(Program program) throws Exception {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(this.astFilename));
-        bufferedWriter.write(program.printAst());
-        bufferedWriter.close();
+        //BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(this.astFilename));
+        //bufferedWriter.write(program.printAst());
+        //bufferedWriter.close();
+    	//System.out.println(program.printAst());
     }
     private void generateCode(Program program) throws Exception {
         CodeFile codeFile = new CodeFile();
@@ -59,9 +59,7 @@ public class Compiler {
         stream.close();
     }
     public static void main(String[] args) {
-    	System.out.println("compiler started");
         Compiler compiler = new Compiler(args[0], args[1], args[2]);
-        System.out.println("compiler started2");
         int result;
         try {
             result = compiler.compile();

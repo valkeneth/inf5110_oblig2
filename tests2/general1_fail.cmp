@@ -10,7 +10,7 @@ proc Main()
 
     var Tmp : int; // error, already a symbol named Tmp in current scope
 
-    //printstr( Tmp() );
+    printstr( Tmp() );
 }
 
 }

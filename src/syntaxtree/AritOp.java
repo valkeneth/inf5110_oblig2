@@ -8,6 +8,10 @@ public class AritOp extends AstNode{
     	super();
     	this.type = type;
     }
+    
+    public String getType() {
+    	return "AritOp";
+    }
 
     public String printAst(String prefix) {
         return "(ARIT_OP " + type;

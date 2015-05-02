@@ -1,10 +1,8 @@
 package syntaxtree;
 import java.util.List;
 
-
 public class Expression extends AstNode{
 
-    String type;
     String name;
     List<AstNode> children;
     
@@ -12,6 +10,31 @@ public class Expression extends AstNode{
     	super();
     	this.type = type;
     	this.children = children;
+    }
+    
+    public String getType() {
+    	if (children.size() == 1) {
+    		return children.get(0).getType();
+    	}
+    	if (children.size() == 3) {
+    		System.out.println("3 children: " + children.get(0).getType() + "," + children.get(1).getType() + "," 
+    				+ children.get(2).getType());
+    		if (children.get(2).getType().equals(children.get(1).getType()) && children.get(0).getType().equals("RelOp")) {
+    			return "bool";
+    		}
+    		else if (children.get(0).getType().equals("AritOp")) {
+    			if (children.get(2).getType().equals(children.get(1).getType())) {
+    				return children.get(2).getType();
+    			}
+    			else if ((children.get(0).getType().equals("float") || children.get(0).getType().equals("int")) && (children.get(1).getType().equals("float") || children.get(1).getType().equals("int"))) {
+    				return "float";
+    			}
+    		}
+    		else {
+    			semErrors.add("Incompatible operands for expression of type " + type);
+    		}
+    	}
+    	return "";
     }
 
     public String printAst(String prefix) {
