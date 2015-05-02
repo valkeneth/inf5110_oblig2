@@ -1,0 +1,176 @@
+package oblig1NF;
+import java_cup.runtime.*;
+import syntaxtree.*;
+import java.util.*;
+import java.io.FileReader;
+
+parser code {:
+	public static void main(String[] args){
+	  try {
+	    parser parser = new parser(new Lexer(new FileReader(args[0])));
+	    parser.parse();
+	  } catch (Exception e) { e.printStackTrace(); }
+	}
+:};
+
+scan with {: return getScanner().next_token(); :};
+
+/* Terminals */
+terminal                        PROGRAM, CLASS;
+terminal                        LBRACK, RBRACK;
+terminal                        LPAR, RPAR;
+terminal                        SEMI, RETURN;
+terminal						VAR, NEW, IF, THEN, NOT;
+terminal						COLON;
+terminal						FLOAT, INT, STRING, BOOL;
+terminal						REF, PROC;
+terminal						EQUAL, PLUS, GT, LT;
+terminal						COMMA, FSTOP, EXPOP;
+terminal String                 ID;
+terminal String                 STRING_LITERAL;
+terminal String					INTEGER;
+terminal String					FLOAT_LITERAL;
+
+/* Non terminals */
+non terminal Program            program;
+non terminal List<AstNode>    	decl_list, stmt_list, param_list, actual_param_list;
+non terminal AstNode			decl;
+non terminal ClassDecl          class_decl;
+non terminal VarDecl			var_decl;
+non terminal Type				type;
+non terminal ProcDecl			proc_decl;
+non terminal Param				param;
+non terminal Statement			stmt;
+non terminal AssignStatement	assign_stmt;
+non terminal ReturnStatement	return_stmt;
+non terminal CallStatement		call_stmt;
+non terminal IfStatement		if_stmt;
+non terminal ActualParam		actual_param;
+non terminal Expression			exp, expterm, expfactor, expplus, expexp;
+non terminal Literal			literal, numb;
+non terminal Var				var;
+non terminal AritOp				arit_op, exp_op;
+non terminal RelOp				rel_op;
+
+/* Precedences */
+precedence left LT, GT;
+precedence left PLUS; /* low */
+precedence right EXPOP;
+precedence left FSTOP; /* high */
+
+/* The grammar */
+program         ::= PROGRAM LBRACK decl_list:dl RBRACK {: RESULT = new Program(dl); :};
+
+decl_list       ::= decl:d {: List<AstNode> l = new LinkedList<AstNode>();
+                                      l.add(d);
+                                      RESULT = l; :} 
+                                      
+        |   decl_list:dl decl:d {: dl.add(d); RESULT = dl; :};
+decl            ::= class_decl:sd {: RESULT = sd; :} 
+		| var_decl:vd {: RESULT = vd; :}
+		| proc_decl:pd {: RESULT = pd; :};
+		
+param_list	::= param:p {: List<AstNode> l = new LinkedList<AstNode>();
+                                      l.add(p);
+                                      RESULT = l; :}    
+        |   param_list:pl COMMA param:p {: pl.add(p); RESULT = pl; :};    
+stmt_list	::= stmt:s {: List<AstNode> l = new LinkedList<AstNode>();
+                                      l.add(s);
+                                      RESULT = l; :}    
+        |   stmt_list:sl stmt:s {: sl.add(s); RESULT = sl; :};            
+                                  
+var_decl 		::= VAR ID:name COLON type:t SEMI {: RESULT = new VarDecl(name, t); :};     
+type			::= FLOAT {: RESULT = new Type("float"); :}   
+		| INT {: RESULT = new Type("int"); :}      
+		| STRING {: RESULT = new Type("string"); :}      
+		| BOOL {: RESULT = new Type("bool"); :}
+		| ID:name {: RESULT = new Type(name); :};                  
+                                  
+class_decl      ::= CLASS ID:name LBRACK decl_list:vdl RBRACK {: RESULT = new ClassDecl(name, vdl); :};
+
+proc_decl		::= PROC ID:name COLON type:t LPAR param_list:pl RPAR LBRACK decl_list:vdl stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, t, pl, vdl, sl); :}
+		|		PROC ID:name LPAR param_list:pl RPAR LBRACK decl_list:vdl stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, null, pl, vdl, sl); :}
+		| 		PROC ID:name COLON type:t LPAR param_list:pl RPAR LBRACK decl_list:vdl RBRACK 
+						{: RESULT = new ProcDecl(name, t, pl, vdl, null); :}
+		|		PROC ID:name LPAR param_list:pl RPAR LBRACK decl_list:vdl RBRACK 
+						{: RESULT = new ProcDecl(name, null, pl, vdl, null); :}
+		| 		PROC ID:name COLON type:t LPAR param_list:pl RPAR LBRACK stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, t, pl, null, sl); :}
+		|		PROC ID:name LPAR param_list:pl RPAR LBRACK stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, null, pl, null, sl); :}
+		| 		PROC ID:name COLON type:t LPAR RPAR LBRACK decl_list:vdl stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, t, null, vdl, sl); :}
+		|		PROC ID:name LPAR RPAR LBRACK decl_list:vdl stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, null, null, vdl, sl); :}
+		| 		PROC ID:name COLON type:t LPAR RPAR LBRACK decl_list:vdl RBRACK 
+						{: RESULT = new ProcDecl(name, t, null, vdl, null); :}
+		|		PROC ID:name LPAR RPAR LBRACK decl_list:vdl RBRACK 
+						{: RESULT = new ProcDecl(name, null, null, vdl, null); :}
+		| 		PROC ID:name COLON type:t LPAR RPAR LBRACK stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, t, null, null, sl); :}
+		|		PROC ID:name LPAR RPAR LBRACK stmt_list:sl RBRACK 
+						{: RESULT = new ProcDecl(name, null, null, null, sl); :};
+						
+param			::= REF ID:name COLON type:t {: RESULT = new Param(name, t, true); :}
+		| ID:name COLON type:t {: RESULT = new Param(name, t, false); :};
+
+stmt			::= return_stmt:rs SEMI {: RESULT = new Statement(rs); :} 
+		| assign_stmt:as SEMI {: RESULT = new Statement(as); :}
+		| call_stmt:ct SEMI {: RESULT = new Statement(ct); :}
+		| if_stmt:is {: RESULT = new Statement(is); :};
+		
+return_stmt		::= RETURN {: RESULT = new ReturnStatement(null); :} 
+		| RETURN exp:e {: RESULT = new ReturnStatement(e); :};
+		
+call_stmt		::= ID:name LPAR actual_param_list:apl RPAR {: RESULT = new CallStatement(name, apl); :} 
+		| ID:name LPAR RPAR {: RESULT = new CallStatement(name, null); :}; 
+		
+actual_param_list ::= actual_param:ap {: List<AstNode> l = new LinkedList<AstNode>();
+                                      l.add(ap);
+                                      RESULT = l; :} 
+                                      
+        |   actual_param_list:apl COMMA actual_param:ap {: apl.add(ap); RESULT = apl; :}; 
+        
+actual_param 	::= REF var:v {: RESULT = new ActualParam(v, null); :}
+		| exp:e {: RESULT = new ActualParam(null, e); :};
+		
+if_stmt			::= IF exp:e THEN LBRACK stmt:s RBRACK {: RESULT = new IfStatement(e, s); :};
+
+assign_stmt		::= var:v COLON EQUAL exp:e {: RESULT = new AssignStatement(v, e); :};
+
+exp				::= exp:e1 rel_op:ro exp:e2 {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(ro); list.add(e1); list.add(e2); RESULT = new Expression("rel", list); :}
+		| NEW ID:name {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(new Type(name)); RESULT = new Expression("new", list); :}
+		| exp:e1 arit_op:ap exp:e2 {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(ap); list.add(e1); list.add(e2); RESULT = new Expression("arit", list); :}						
+		| literal:l {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(l); RESULT = new Expression("literal", list); :} 
+		| var:v {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(v); RESULT = new Expression("var", list); :} 
+		| call_stmt:cs {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(cs); RESULT = new Expression("call_stmt", list); :} 
+		| numb:n {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(n); RESULT = new Expression("literal", list); :}
+		| NOT exp:e {: List<AstNode> list = new LinkedList<AstNode>();
+								list.add(e); RESULT = new Expression("not", list); :};
+
+literal			::= STRING_LITERAL {: RESULT = new Literal("STRING", "a string"); :};
+
+var				::= ID:name {: RESULT = new Var(name); :} | exp:e FSTOP ID:name {: RESULT = new Var(e, name); :};
+
+arit_op			::= PLUS {: RESULT = new AritOp("+"); :} | EXPOP {: RESULT = new AritOp("#"); :};
+
+rel_op			::= GT {: RESULT = new RelOp(">"); :} | LT {: RESULT = new RelOp("<"); :};
+
+numb 			::= INTEGER:i {: RESULT = new Literal("INTEGER", i); :}
+		| FLOAT_LITERAL:f {: RESULT = new Literal("FLOAT", f); :};
+
+
+
+						
+						
+						
+

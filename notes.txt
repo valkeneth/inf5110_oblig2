@@ -1,0 +1,27 @@
+Here in the compiler class is the bytecode built up..
+
+
+CodeFile codeFile = new CodeFile(); 
+
+/// here - write this?
+program.generateCode(codeFile);
+
+
+byte[] bytecode = codeFile.getBytecode();
+
+
+
+Syntactic analysis -> build abstract tree
+-> do sth with tree
+
+typechecking, namechecking, block structures
+code-generation to own bytecode from an abstract tree
+
+
+Ok, lets pretend we have a tree and write some shit..
+
+
+do :
+restults from "test suite"
+list bytecode from RunMe.cmp
+Return values
