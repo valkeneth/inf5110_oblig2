@@ -31,7 +31,7 @@ public class Program {
     
     public void printSemanticErrors() {
     	for (int i = 0; i < nodes.get(0).semErrors.size(); i++) {
-			System.out.println("SemanticError " + i + ":" + nodes.get(0).semErrors.get(i));
+			System.out.println("SemanticError " + (i + 1) + ":" + nodes.get(0).semErrors.get(i));
 		}
     }
 

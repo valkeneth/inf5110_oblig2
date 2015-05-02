@@ -9,6 +9,9 @@ public class IfStatement extends Statement{
     	super.stmt = this;
     	this.stmt = stmt;
     	this.exp = exp;
+    	if (exp != null) {
+    		if (!exp.getType().equals("bool")) semErrors.add("If expression expects boolean");
+    	}
     }
 
     public String printAst(String prefix) {

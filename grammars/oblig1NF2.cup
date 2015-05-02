@@ -178,8 +178,8 @@ exp				::= exp:e1 rel_op:ro exp:e2 {: List<AstNode> list = new LinkedList<AstNod
 literal			::= STRING_LITERAL {: RESULT = new Literal("STRING", "a string"); :}
 		| INTEGER:i {: RESULT = new Literal("INT", i); :}
 		| FLOAT_LITERAL:f {: RESULT = new Literal("FLOAT", f); :}
-		| FALSE {: RESULT = new Literal("FALSE", "false"); :}
-		| TRUE {: RESULT = new Literal("TRUE", "true"); :}
+		| FALSE {: RESULT = new Literal("bool", "false"); :}
+		| TRUE {: RESULT = new Literal("bool", "true"); :}
 		| NULL {: RESULT = new Literal("null", "null"); :};
 
 var				::= ID:name {: RESULT = new Var(name); :} | exp:e FSTOP ID:name {: RESULT = new Var(e, name); :};

@@ -39,6 +39,7 @@ public class ProcDecl extends AstNode{
 	    				Statement st = (Statement)stmt_list.get(x);
 	    				if (st.getStatement() instanceof ReturnStatement) {
 	    					retFound = true;
+	    					if (name.equals("Main") && type != null) semErrors.add("main function declared with return type");
 	    				}
 	    			}
 	    		}
@@ -47,6 +48,10 @@ public class ProcDecl extends AstNode{
     		else {
     			semErrors.add("Missing return statement for function " + name);
     		}
+    	}
+    	else {
+    		Symbol sym = new Symbol(name, "", "method");
+        	symbolTable.add(sym);
     	}
     	for (int j = 0; j < children.size(); j++) {
     		children.get(j).setParent(this);

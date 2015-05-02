@@ -10,6 +10,16 @@ public class Expression extends AstNode{
     	super();
     	this.type = type;
     	this.children = children;
+    	if (type.equals("new")) {
+    		String xtype = children.get(0).getType();
+    		boolean newTypeFound = false;
+    		for (int i = 0; i < symbolTable.size(); i++) {
+    			if (symbolTable.get(i).name.equals(xtype)) {
+    				newTypeFound = true;
+    			}
+    		}
+    		if (!newTypeFound) semErrors.add("new keyword - object of type " + xtype + " not declared");
+    	}
     }
     
     public String getType() {
