@@ -8,6 +8,7 @@ public class AstNode {
     public static List<Symbol> symbolTable = new ArrayList<Symbol>();
     public static List<String> semErrors = new ArrayList<String>();
     public static AstNode parent = null;
+    public String scope = "";
     
     public void setParent(AstNode node) {
     	this.parent = node;
@@ -15,6 +16,14 @@ public class AstNode {
 
     public AstNode getParent() {
     	return parent;
+    }
+    
+    public void setScope(String scope) {
+    	this.scope = scope;
+    }
+    
+    public String getScope() {
+    	return scope;
     }
     
     public String printAst(String prefix) {
@@ -32,6 +41,10 @@ public class AstNode {
     public static void resetSymbols() {
     	symbolTable = new ArrayList<Symbol>();
     	semErrors = new ArrayList<String>();
+    	symbolTable.add(new Symbol("readint", "int", "method"));
+    	Symbol sym = new Symbol("printint", "null", "method");
+    	sym.setParams("int");
+    	symbolTable.add(sym);
     }
     
     public static List<String> getErrors() {

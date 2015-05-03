@@ -13,6 +13,10 @@ public class Type extends AstNode{
         return "(TYPE " + name + ")";
     }
     
+    public String getType() {
+    	return name;
+    }
+    
     public String getName() {
     	return name;
     }

@@ -10,9 +10,11 @@ public class ProcDecl extends AstNode{
     
     public ProcDecl (String name, Type type, List<AstNode> param_list, List<AstNode> decl_list, List<AstNode> stmt_list) {
     	super();
+    	Symbol sym = null;
     	this.name = name;
     	this.type2 = type;
     	if (param_list != null) this.children.addAll(param_list);
+    	if (name.equals("Main") && param_list != null) semErrors.add("main function declared with parameters");
     	if (decl_list != null) this.children.addAll(decl_list);
     	if (stmt_list != null) this.children.addAll(stmt_list);
     	if (type != null) {
@@ -26,8 +28,7 @@ public class ProcDecl extends AstNode{
     		}
     		if (tname.equals("float") || tname.equals("int") || tname.equals("string") ||
     				tname.equals("bool") || tname.equals("null") || inSymbols) {
-            	Symbol sym = new Symbol(name, tname, "method");
-            	symbolTable.add(sym);
+            	sym = new Symbol(name, tname, "method");
     		}
     		else {
     			semErrors.add("Undeclared return type: " + tname);
@@ -40,6 +41,7 @@ public class ProcDecl extends AstNode{
 	    				if (st.getStatement() instanceof ReturnStatement) {
 	    					retFound = true;
 	    					if (name.equals("Main") && type != null) semErrors.add("main function declared with return type");
+	    					
 	    				}
 	    			}
 	    		}
@@ -50,9 +52,22 @@ public class ProcDecl extends AstNode{
     		}
     	}
     	else {
-    		Symbol sym = new Symbol(name, "", "method");
-        	symbolTable.add(sym);
+    		sym = new Symbol(name, "", "method");
     	}
+    	
+    	//param signature
+    	if (param_list != null) {
+    		String paramsign = "";
+    		for (int j = 0; j < param_list.size(); j++) {
+        		paramsign += (paramsign.equals("") ? "" : ",") + param_list.get(j).getType();
+        	}
+    		if (sym != null) {
+    			sym.setParams(paramsign);
+    		}
+    	}
+    	if (sym != null) symbolTable.add(sym);
+    	
+    	
     	for (int j = 0; j < children.size(); j++) {
     		children.get(j).setParent(this);
     		children.get(j).checkParentSem();

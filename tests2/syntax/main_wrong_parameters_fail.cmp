@@ -1,8 +1,0 @@
-program
-{
-
-	proc Main( errorhere : int ) // Fail: parameter to main.
-	{
-	}
-
-}

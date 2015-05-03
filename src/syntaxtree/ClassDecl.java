@@ -14,6 +14,8 @@ public class ClassDecl extends AstNode{
     	super();
         this.name = name;
         this.children = children;
+        Symbol sym = new Symbol(name, name, "class");
+    	symbolTable.add(sym);
     }
 
     public String printAst(String prefix) {

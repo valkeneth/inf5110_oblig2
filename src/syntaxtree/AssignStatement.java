@@ -11,21 +11,22 @@ public class AssignStatement extends Statement{
     	this.var = var;
     	this.exp = exp;
     	String varType = this.var.getType();
+    	String expType = this.exp.getType();
     	if (varType.equals("")) {
     		for (int i = 0; i < symbolTable.size(); i++) {
     			if (symbolTable.get(i).name.equals(var.getName()) && symbolTable.get(i).mtype.equals("variable")) {
     				varType = symbolTable.get(i).type;
+    				System.out.println(varType);
     			}
     		}
     	}
     		//varType = symbolTable.get(var.getName());
-    	String expType = this.exp.getType();
     	if (varType.equals(expType) != true) {
     		if (varType.equals("float") && expType.equals("int")) {
     			//alright
     		}
     		else {
-        		semErrors.add("Trying to assign a type " + expType + " into " + varType);
+        		semErrors.add("Trying to assign a type " + expType + " into " + this.var.getName() + ":" + varType);
     		}
     	}
     }

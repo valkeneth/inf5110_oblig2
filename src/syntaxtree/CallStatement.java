@@ -12,13 +12,26 @@ public class CallStatement extends Statement{
     	this.name = name;
     	this.children = children;
     	boolean methodDeclared = false;
+    	String paramslist = "";
     	for (int i = 0; i < symbolTable.size(); i++) {
 			if (symbolTable.get(i).name.equals(this.name) && symbolTable.get(i).mtype.equals("method")) {
 				methodDeclared = true;
+				paramslist = symbolTable.get(i).params;
 			}
     	}
-    	if (name.equals("printstr") || name.equals("printint") || name.equals("printfloat") || name.equals("printline")) methodDeclared = true;
+    	if (name.equals("printstr") || name.equals("printfloat") || name.equals("printline")) methodDeclared = true;
     	if (!methodDeclared) semErrors.add("Method with name " + name + " has not been declared");
+    	if (methodDeclared && !paramslist.equals("")) {
+    		if (children != null) {
+    			String paramsign = "";
+        		for (int i = 0; i < children.size(); i++) {
+                	paramsign += (paramsign.equals("") ? "" : ",") + children.get(i).getType();
+        		}
+    			if (!paramslist.equals(paramsign)) {
+    				semErrors.add("Parameters dont match method signature - expected: " + paramslist + ", actual: "+paramsign);
+    			}
+    		}
+    	}
     }
     
     public String getType() {

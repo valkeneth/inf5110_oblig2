@@ -1,5 +1,6 @@
 package syntaxtree;
 
+
 public class Param extends AstNode{
 
     String name;
@@ -14,7 +15,11 @@ public class Param extends AstNode{
     	Symbol sym = new Symbol(name, type.getName(), "variable");
     	symbolTable.add(sym);
     }
-
+    
+   public String getType() {
+	   return type.getName();
+   }
+   
     public String printAst(String prefix) {
         return prefix + "(PARAM_DECL " + (ref ? "ref" : "") + type.printAst("") + "(NAME " + name + "))\n";
     }

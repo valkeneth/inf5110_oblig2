@@ -11,6 +11,16 @@ public class ActualParam extends AstNode{
     	this.exp = exp;
     }
 
+    public String getType() {
+    	if (var != null) {
+    		return var.getType();
+    	}
+    	if (exp != null) {
+    		return exp.getType();
+    	}
+    	return "";
+    }
+    
     public String printAst(String prefix) {
         String ret = prefix + "(ACTUAL_PARAM ";
         if (var != null) ret += var.printAst("").trim();
