@@ -1,5 +1,5 @@
 package syntaxtree;
-
+import bytecode.instructions.*;
 
 public class Var extends AstNode{
 
@@ -28,6 +28,14 @@ public class Var extends AstNode{
     
     public String getName() {
     	return this.name;
+    }
+    
+    public void genCode() {
+    	if (belProc == null) return;
+    	String varName = "";
+    	if (exp != null) varName += exp.getName() + ".";
+    	varName += name;
+    	belProc.addInstruction(new LOADLOCAL(belProc.variableNumber(varName)));
     }
     
     @Override

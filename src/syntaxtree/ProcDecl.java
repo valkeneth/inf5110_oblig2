@@ -76,7 +76,6 @@ public class ProcDecl extends AstNode{
     	}
     	
     	//bytecode 
-    	System.out.println("adding procedure");
     	codeFile.addProcedure(name);
     	CodeProcedure thisProc = new CodeProcedure(name, VoidType.TYPE, codeFile);
     	codeFile.updateProcedure(thisProc);
@@ -103,7 +102,6 @@ public class ProcDecl extends AstNode{
     		}
     	}
     	if (name.equals("Main")) {
-    		System.out.println("setting main");
     		codeFile.setMain("Main");
     	}
     }

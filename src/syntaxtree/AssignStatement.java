@@ -41,14 +41,15 @@ public class AssignStatement extends Statement{
     public void genCode() {
     	if (belProc != null) {
     		if (exp.getExpType().equals("new")) {
-    			System.out.println("trying to add instruction");
         		belProc.addInstruction(new NEW(codeFile.structNumber(exp.getType())));
         		belProc.addInstruction(new STORELOCAL(belProc.variableNumber(var.getName())));
         		codeFile.updateProcedure(belProc);
     		}
-    		if (exp.getExpType().equals("arit")) {
+    		if (exp.getExpType().equals("AritOp")) {
+    			exp.belProc = belProc;
     			exp.genCode();
-    			//belProc.addInstruction(new STORELOCAL(belProc.variable(var.getName())));
+    			belProc.addInstruction(new STORELOCAL(belProc.variableNumber(var.getName())));
+    			codeFile.updateProcedure(belProc);
     		}
     	}
     	return;

@@ -57,7 +57,6 @@ public class Compiler {
         codeFile = program.getCode();
         byte[] bytecode = codeFile.getBytecode();
         DataOutputStream stream = new DataOutputStream(new FileOutputStream (this.binFilename));
-        System.out.println("writing bytecode");
         stream.write(bytecode);
         stream.close();
     }

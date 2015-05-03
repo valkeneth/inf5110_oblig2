@@ -1,5 +1,6 @@
 package syntaxtree;
 import java.util.List;
+import bytecode.instructions.*;
 
 public class Expression extends AstNode{
 
@@ -20,6 +21,10 @@ public class Expression extends AstNode{
     		}
     		if (!newTypeFound) semErrors.add("new keyword - object of type " + xtype + " not declared");
     	}
+    }
+    
+    public String getName() {
+    	return name;
     }
     
     public String getExpType() {
@@ -55,6 +60,28 @@ public class Expression extends AstNode{
     	return "";
     }
 
+    public void genCode() {
+    	if (belProc != null) {
+	    	switch (this.type) {
+	    		case "AritOp":
+	    			if (children.get(0) instanceof AritOp) {
+	    				AritOp a = (AritOp) children.get(0);
+	    				String op = a.getOp();
+	    				if (op.equals("+")) {
+	    					children.get(1).belProc = belProc;
+	    					children.get(1).genCode();
+	    					children.get(2).belProc = belProc;
+	    					children.get(2).genCode();
+	    					belProc.addInstruction(new ADD());
+	    				}
+	    			}
+	    		case "var":
+	    			children.get(0).belProc = belProc;
+					children.get(0).genCode();
+	    	}
+    	}
+    }
+    
     public String printAst(String prefix) {
     	switch (this.type) {
     		case "literal":
@@ -73,7 +100,7 @@ public class Expression extends AstNode{
     			}
     			ret += prefix + ")\n";
     			return ret;
-    		case "arit":
+    		case "AritOp":
     			ret = prefix + children.get(0).printAst("") + "\n";
     			if (children.get(1) != null) {
     				ret += children.get(1).printAst(prefix + "\t");

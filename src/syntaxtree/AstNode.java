@@ -50,9 +50,8 @@ public class AstNode {
     }
     
     public static void init() {
-    	System.out.println("Init");
-    	symbolTable = new ArrayList<Symbol>();
-    	semErrors = new ArrayList<String>();
+    	//symbolTable = new ArrayList<Symbol>();
+    	//semErrors = new ArrayList<String>();
     	symbolTable.add(new Symbol("readint", "int", "method"));
     	Symbol sym = new Symbol("printint", "null", "method");
     	sym.setParams("int");
@@ -60,7 +59,8 @@ public class AstNode {
     }
     
     public static void resetSymbols() {
-    	System.out.println("Resetting");
+    	symbolTable = new ArrayList<Symbol>();
+    	semErrors = new ArrayList<String>();
     	codeFile = new CodeFile();
     }
     
