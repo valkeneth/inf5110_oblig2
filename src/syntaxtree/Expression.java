@@ -22,6 +22,14 @@ public class Expression extends AstNode{
     	}
     }
     
+    public String getExpType() {
+    	return this.type;
+    }
+    
+    public List<AstNode> getChildren() {
+    	return children;
+    }
+    
     public String getType() {
     	if (children.size() == 1) {
     		return children.get(0).getType();

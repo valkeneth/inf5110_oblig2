@@ -32,9 +32,10 @@ public class Var extends AstNode{
     
     @Override
     public String getType() {
+    	String types = "";
     	for (int i = 0; i < symbolTable.size(); i++) {
-    		if (symbolTable.get(i).name.equals(this.name)) return symbolTable.get(i).type;
+    		if (symbolTable.get(i).name.equals(this.name)) types += symbolTable.get(i).type;
     	}
-    	return "";
+    	return types;
     }
 }

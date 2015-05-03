@@ -11,10 +11,14 @@ public class Program {
 
     public Program(List<AstNode> nodes) {
         this.nodes = nodes;
+        this.nodes.get(0).init();
+        for (int i = 0; i < nodes.size(); i++) {
+        	nodes.get(i).genCode();
+        }
     }
     
-    public void generateCode(CodeFile codefile) {
-    	//
+    public CodeFile getCode() {
+    	return nodes.get(0).codeFile;
     }
     
     public int checkSemantics() {
@@ -22,11 +26,13 @@ public class Program {
     	//System.out.println("Num symbols: " + nodes.get(0).symbolTable.size());
     	if (nodes.get(0).getErrors().size() > 0) {
     		printSemanticErrors();
-    		nodes.get(0).resetSymbols();
     		return 2;
     	}
-    	nodes.get(0).resetSymbols();
     	return 0;
+    }
+    
+    public void reset() {
+    	nodes.get(0).resetSymbols();
     }
     
     public void printSemanticErrors() {

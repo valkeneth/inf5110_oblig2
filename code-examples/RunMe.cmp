@@ -17,9 +17,9 @@ program
       if a > b then {
          res := a;
       }
-      else {
-         res := b;
-      }
+      //else {
+         //res := b;
+      //}
       return res;
   }
   proc printCmplx( pr : Complex ) {

@@ -33,13 +33,16 @@ public class Compiler {
         // Check semantics.
         int semanticCheck = program.checkSemantics();
         if(semanticCheck == 0){ // If it is all ok:
-            //writeAST(program);
-            //generateCode(program);
+            writeAST(program);
+            generateCode(program);
+            program.reset();
             return 0;
         } else if (semanticCheck == 1){ // If there is a SYNTAX ERROR (Should not get that for the tests):
             System.out.println("syntax error");
+            program.reset();
             return 1;
         } else { // If there is a SEMANTIC ERROR (Should get that for the test with "_fail" in the name):
+        	program.reset();
         	return 2;
         }
     }
@@ -51,7 +54,7 @@ public class Compiler {
     }
     private void generateCode(Program program) throws Exception {
         CodeFile codeFile = new CodeFile();
-        program.generateCode(codeFile);
+        codeFile = program.getCode();
         byte[] bytecode = codeFile.getBytecode();
         DataOutputStream stream = new DataOutputStream(new FileOutputStream (this.binFilename));
         System.out.println("writing bytecode");

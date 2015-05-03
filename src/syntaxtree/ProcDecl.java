@@ -1,6 +1,8 @@
 package syntaxtree;
 import java.util.List;
 import java.util.LinkedList;
+import bytecode.*;
+import bytecode.type.*;
 
 public class ProcDecl extends AstNode{
 
@@ -71,6 +73,38 @@ public class ProcDecl extends AstNode{
     	for (int j = 0; j < children.size(); j++) {
     		children.get(j).setParent(this);
     		children.get(j).checkParentSem();
+    	}
+    	
+    	//bytecode 
+    	System.out.println("adding procedure");
+    	codeFile.addProcedure(name);
+    	CodeProcedure thisProc = new CodeProcedure(name, VoidType.TYPE, codeFile);
+    	codeFile.updateProcedure(thisProc);
+    	
+    	for (int j = 0; j < children.size(); j++) {
+    		children.get(j).belProc = thisProc;
+    	}
+    	if (param_list != null) {
+    		for (int j = 0; j < param_list.size(); j++) {
+    			param_list.get(j).belProc = thisProc;
+    			param_list.get(j).genCode();
+    		}
+    	}
+    	if (decl_list != null) {
+    		for (int j = 0; j < decl_list.size(); j++) {
+    			decl_list.get(j).belProc = thisProc;
+    			decl_list.get(j).genCode();
+    		}
+    	}
+    	if (stmt_list != null) {
+    		for (int j = 0; j < stmt_list.size(); j++) {
+    			stmt_list.get(j).belProc = thisProc;
+    			stmt_list.get(j).genCode();
+    		}
+    	}
+    	if (name.equals("Main")) {
+    		System.out.println("setting main");
+    		codeFile.setMain("Main");
     	}
     }
     

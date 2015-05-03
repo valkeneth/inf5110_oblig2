@@ -1,4 +1,5 @@
 package syntaxtree;
+import bytecode.instructions.*;
 
 public class ReturnStatement extends Statement{
 	
@@ -16,6 +17,24 @@ public class ReturnStatement extends Statement{
         if (exp != null) ret += exp.printAst(prefix + "\t");
         ret += prefix + ")\n";
         return ret;
+    }
+    
+    public void genCode() {
+    	if (exp != null && belProc != null) {
+    		if (exp.getExpType().equals("var")) {
+    			if (exp.getChildren().get(0) instanceof Var) {
+    				Var v = (Var) exp.getChildren().get(0);
+    				belProc.addInstruction( new LOADLOCAL (belProc.variableNumber(v.getName())));
+    			}
+    			//
+    		}
+    		else {
+    			
+    		}
+
+        	belProc.addInstruction(new RETURN());
+        	codeFile.updateProcedure(belProc);
+    	}
     }
     
     @Override

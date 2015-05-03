@@ -198,15 +198,6 @@
 		</java>
 	</target>
 	
-	<!-- Run compiler on example RunMe -->
-		<target name="compile-runme2" depends="init">
-			<java classname="compiler.Compiler" classpathref="path-run">
-				<arg value="code-examples/simple3.cmp"/>
-				<arg value="code-examples/simple3.ast"/>
-				<arg value="code-examples/simple3.bin"/>
-			</java>
-		</target>
-
 	<!-- List example RunMe -->
 	<target name="list-runme" depends="init">
 		<java classname="runtime.VirtualMachine" classpathref="path-run">

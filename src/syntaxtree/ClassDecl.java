@@ -1,5 +1,7 @@
 package syntaxtree;
 import java.util.List;
+import bytecode.CodeStruct;
+import bytecode.type.*;
 
 public class ClassDecl extends AstNode{
 
@@ -16,6 +18,16 @@ public class ClassDecl extends AstNode{
         this.children = children;
         Symbol sym = new Symbol(name, name, "class");
     	symbolTable.add(sym);
+    	
+    	CodeStruct thisStruct = new CodeStruct(name);
+    	codeFile.addStruct(name);
+    	codeFile.updateStruct(thisStruct);
+    	
+    	for (int i = 0; i < children.size(); i++) {
+    		children.get(i).belStruct = thisStruct;
+    		children.get(i).genCode();
+    	}
+    	
     }
 
     public String printAst(String prefix) {

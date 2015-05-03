@@ -12,6 +12,13 @@ public class Statement extends AstNode{
     	}
     }
     
+    
+    public void genCode() {
+    	stmt.belProc = belProc;
+    	if (stmt instanceof AssignStatement) stmt.genCode();
+    	if (stmt instanceof ReturnStatement) stmt.genCode();
+    }
+    
     public Statement getStatement() {
     	return stmt;
     }
